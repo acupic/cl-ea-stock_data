@@ -1,8 +1,117 @@
-# Chainlink Python Serverless External Adapter Template
+# Data that can be obtained by CL-EA-Stock-Data
 
-![Lint and unit testing](https://github.com/thodges-gh/CL-EA-Python-Template/workflows/Lint%20and%20unit%20testing/badge.svg)
+currency 
+exchange 
+exchangeTimezoneName 
+fiftyTwoWeekHigh 
+fiftyTwoWeekHighChange 
+fiftyTwoWeekHighChangePercent
+fiftyTwoWeekLow 
+fiftyTwoWeekLowChange
+fiftyTwoWeekLowChangePercent
+fiftyTwoWeekRange
+ExchangeName 
+market 
+marketCap
+marketState
+quoteType
+region
+regularMarketChange 
+regularMarketChangePercent 
+regularMarketDayHigh
+regularMarketDayLow
+regularMarketDayRange 
+MarketOpen
+MarketPreviousClose
+MarketPrice
+MarketVolume
+sharesOutstanding          
 
-This template shows a basic usecase of an external adapter written in Python for the CryptoCompare API. It can be ran locally, in Docker, AWS Lambda, or GCP Functions.
+# How to obtain data
+
+You only need to change to the desired stock symbol e.g. "TSLA" request.add("station_id", "TSLA");
+The current jobId = "7ff89e0ae0344d29b69a12977feeacd2"; is set for a job the gets you the current market price
+You can change both oracle and jobId if you prefer
+
+See below an example ATestnetConsumer.sol
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.7;
+
+import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
+
+/**
+ * Request testnet LINK and ETH here: https://faucets.chain.link/
+ * Find information on LINK Tokåen Contracts and get the latest ETH and LINK faucets here: https://docs.chain.link/docs/link-token-contracts/
+ */
+
+/**
+ * THIS IS AN EXAMPLE CONTRACT WHICH USES HARDCODED VALUES FOR CLARITY.
+ * PLEASE DO NOT USE THIS CODE IN PRODUCTION.
+ */
+contract APIConsumer is ChainlinkClient {
+    using Chainlink for Chainlink.Request;
+  
+    uint256 public price;
+    
+    address private oracle;
+    bytes32 private jobId;
+    uint256 private fee;
+    
+    /**
+     * Network: Kovan
+     * Oracle: 0xc57B33452b4F7BB189bB5AfaE9cc4aBa1f7a4FD8 (Chainlink Devrel   
+     * Node)
+     * Job ID: d5270d1c311941d0b08bead21fea7747
+     * Fee: 0.1 LINK
+     */
+    constructor() {
+        setPublicChainlinkToken();
+        oracle = 0x4c12849d6bAFae264abF873A2Cc0f2CC850528A9;
+        jobId = "7ff89e0ae0344d29b69a12977feeacd2";
+        fee = 0.1 * 10 ** 18; // (Varies by network and job)
+    }
+    
+    /**
+     * Create a Chainlink request to retrieve API response, find the target
+     * data, then multiply by 1000000000000000000 (to remove decimal places from data).
+     */
+    function requestPriceData() public returns (bytes32 requestId) 
+    {
+        Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
+        
+        // Set the URL to perform the GET request on
+ 
+        
+        // Set the path to find the desired data in the API response, where the response format is:
+        // {"RAW":
+        //   {"ETH":
+        //    {"USD":
+        //     {
+        //      "VOLUME24HOUR": xxx.xxx,
+        //     }
+        //    }
+        //   }
+        //  }
+        request.add("station_id", "TSLA");
+        
+        // Multiply the result by 1000000000000000000 to remove decimals
+
+        
+        // Sends the request
+        return sendChainlinkRequestTo(oracle, request, fee);
+    }
+    
+    /**
+     * Receive the response in the form of uint256
+     */ 
+    function fulfill(bytes32 _requestId, uint256 _price) public recordChainlinkFulfillment(_requestId)
+    {
+        price = _price;
+    }
+
+    // function withdrawLink() external {} - Implement a withdraw function to avoid locking your LINK in the contract
+}
 
 ## Install
 
