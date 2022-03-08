@@ -1,5 +1,5 @@
 # Data that can be obtained by CL-EA-Stock-Data
-
+```
 currency 
 exchange 
 exchangeTimezoneName 
@@ -26,7 +26,7 @@ MarketPreviousClose
 MarketPrice
 MarketVolume
 sharesOutstanding          
-
+```
 # How to obtain data
 
 You only need to change to the desired stock symbol e.g. "TSLA" request.add("station_id", "TSLA");
@@ -35,6 +35,7 @@ You can change both oracle and jobId if you prefer
 
 See below an example ATestnetConsumer.sol
 
+```
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
 
@@ -112,6 +113,7 @@ contract APIConsumer is ChainlinkClient {
 
     // function withdrawLink() external {} - Implement a withdraw function to avoid locking your LINK in the contract
 }
+```
 
 ## Install
 
