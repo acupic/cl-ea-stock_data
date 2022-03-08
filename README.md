@@ -21,13 +21,13 @@ pipenv run pytest
 Build the image
 
 ```
-docker build . -t cl-ea-stock-data-test
+docker build . -t cl-ea-stock_data
 ```
 
 Run the container
 
 ```
-docker run -it -p 8080:8080 cl-ea-stock-data-test
+docker run -it -p 8080:8080 cl-ea-stock_data
 ```
 
 ## Run with Serverless
