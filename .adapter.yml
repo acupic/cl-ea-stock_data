@@ -1,0 +1,12 @@
+name: CL-EA-Stock-Data
+description: Adapter that connects Chainlink nodes to the CL-EA-Stock-Data. With this Adapter a huge number of different stock data can be obtained.
+node_identifier: cl-ea-stock_data
+platforms:
+  - Docker
+  - AWS Lambda
+  - GCP Functions
+data_sources:
+  - name: finance.yahoo.com
+    url: https://finance.yahoo.com/
+parameters:
+  - match_id_or_slug
